@@ -11,11 +11,11 @@ runs:
 
     ## Checkout the code
     - name: Checkout the latest code action repo
-      id: git_checkout
+      id: git_checkout_stacks_core
       uses: actions/checkout@v3
 
     - name: Get the action repo code
-      id: git_checkout
+      id: git_checkout_actions
       uses: actions/checkout@v3
       with:
         repository: ASuciuX/actions
