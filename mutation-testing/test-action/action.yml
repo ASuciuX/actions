@@ -2,6 +2,10 @@ name: "Test actions"
 
 runs:
   using: "composite"
+
+  main: ../shell-scripts/hello-world.sh
+  post: ../shell-scripts/hello-world.sh
+
   steps:
     ## cleanup runner
     - name: Cleanup Runner action repo
@@ -18,7 +22,5 @@ runs:
       run: |
         ls ./
 
-runs:
-  using: bash
-  main: ../shell-scripts/hello-world.sh
-  post: ../shell-scripts/hello-world.sh
+    - name: Run the script
+      uses: ./ASuciuX/actions/mutation-testing/shell-scripts/hello-world.sh
