@@ -16,6 +16,12 @@ runs:
       with:
         fetch-depth: 0
 
+    - name: Relative diff
+      shell: bash
+      run: |
+        git branch -av
+        git diff origin/${{ github.base_ref }}.. | tee git.diff
+
     # Checkout the actions code
     - name: Get the action repo code
       id: git_checkout_actions
@@ -25,12 +31,10 @@ runs:
         ref: feat/mutation-testing
         path: ./actions-repo
 
-    - name: Relative diff
+    - name: Copy the git diff file to scripts folder
       shell: bash
       run: |
-        git branch -av
-        git diff origin/${{ github.base_ref }}.. | tee git.diff
-      working-directory: actions-repo/mutation-testing/shell-scripts
+        mv git.diff ./actions-repo/mutation-testing/shell-scripts/
 
     - uses: Swatinem/rust-cache@v2
 
