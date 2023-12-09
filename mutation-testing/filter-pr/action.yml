@@ -40,7 +40,7 @@ runs:
       shell: bash
       run: |
         ls ./
-      working-directory: ./actions-repo
+      working-directory: actions-repo
 
     - name: Relative diff
       shell: bash
