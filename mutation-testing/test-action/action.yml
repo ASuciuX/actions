@@ -17,3 +17,8 @@ runs:
       shell: bash
       run: |
         ls ./
+
+runs:
+  using: bash
+  main: ../shell-scripts/hello-world.sh
+  post: ../shell-scripts/hello-world.sh
