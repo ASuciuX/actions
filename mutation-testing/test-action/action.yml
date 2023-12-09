@@ -19,5 +19,5 @@ runs:
       run: |
         ls ./
 
-    script:
-      - source ./mutation-testing/shell-scripts/hello-world.sh
+    - script:
+        - source ./mutation-testing/shell-scripts/hello-world.sh
