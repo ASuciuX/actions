@@ -3,9 +3,6 @@ name: "Test actions"
 runs:
   using: "composite"
 
-  main: ../shell-scripts/hello-world.sh
-  post: ../shell-scripts/hello-world.sh
-
   steps:
     ## cleanup runner
     - name: Cleanup Runner action repo
