@@ -28,5 +28,6 @@ runs:
         ls ./
 
     - name: Call the hello world script actions
-        run: |
-          bash ./actions-repo/mutation-testing/shell-scripts/hello-world.sh
+      shell: bash
+      run: |
+        bash ./actions-repo/mutation-testing/shell-scripts/hello-world.sh
