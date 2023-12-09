@@ -25,6 +25,12 @@ runs:
         ref: feat/mutation-testing
         path: ./actions-repo
 
+    - name: Print shell scripts folder contents
+      shell: bash
+      run: |
+        ls ./
+      working-directory: actions-repo/shell-scripts
+
     - name: Relative diff
       shell: bash
       run: |
