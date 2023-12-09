@@ -25,18 +25,12 @@ runs:
         ref: feat/mutation-testing
         path: ./actions-repo
 
-    - name: Print shell scripts folder contents
-      shell: bash
-      run: |
-        ls ./
-      working-directory: actions-repo/shell-scripts
-
     - name: Relative diff
       shell: bash
       run: |
         git branch -av
         git diff origin/${{ github.base_ref }}.. | tee git.diff
-      working-directory: actions-repo/shell-scripts
+      working-directory: actions-repo/mutation-testing/shell-scripts
 
     - uses: Swatinem/rust-cache@v2
 
@@ -47,7 +41,7 @@ runs:
     - name: Remove deleted file lines from git.diff file
       shell: bash
       run: ./remove-deleted-file-lines.sh
-      working-directory: actions-repo/shell-scripts
+      working-directory: actions-repo/mutation-testing/shell-scripts
 
     - name: Run mutants and check the exit code of the command, fail the workflow if mutations are not caught
       shell: bash
@@ -97,4 +91,4 @@ runs:
                 exit 1
                 ;;
         esac
-      working-directory: actions-repo/shell-scripts
+      working-directory: actions-repo/mutation-testing/shell-scripts
