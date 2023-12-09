@@ -25,6 +25,13 @@ runs:
         ref: feat/mutation-testing
         path: ./actions-repo
 
+    - name: Print working directory
+      shell: bash
+      run: |
+        pwd
+        ls ./
+      working-directory: ./actions-repo/shell-scripts
+
     - name: Relative diff
       shell: bash
       run: |
