@@ -1,0 +1,7 @@
+name: "Test actions"
+
+runs:
+  steps:
+    - name: Print root files
+      run: |
+        ls ./
