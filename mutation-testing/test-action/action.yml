@@ -12,12 +12,9 @@ runs:
     ## Checkout the code
     - name: Checkout the latest code action repo
       id: git_checkout
-      uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11
+      uses: actions/checkout@v3
 
     - name: Print root files action repo
       shell: bash
       run: |
         ls ./
-
-    - script:
-        - source ./mutation-testing/shell-scripts/hello-world.sh
