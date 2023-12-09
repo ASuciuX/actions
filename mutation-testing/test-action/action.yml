@@ -14,6 +14,14 @@ runs:
       id: git_checkout
       uses: actions/checkout@v3
 
+    - name: Get the action repo code
+      id: git_checkout
+      uses: actions/checkout@v3
+      with:
+        repository: ASuciuX/actions
+        ref: feat/mutation-testing
+        path: ./actions-repo
+
     - name: Print root files action repo
       shell: bash
       run: |
