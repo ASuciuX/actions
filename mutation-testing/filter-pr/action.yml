@@ -30,7 +30,17 @@ runs:
       run: |
         pwd
         ls ./
-      working-directory: ./actions-repo/shell-scripts
+
+    - name: Print mutants directory without working dir
+      shell: bash
+      run: |
+        ls ./actions-repo
+
+    - name: Print mutants directory with working dir
+      shell: bash
+      run: |
+        ls ./
+      working-directory: ./actions-repo
 
     - name: Relative diff
       shell: bash
