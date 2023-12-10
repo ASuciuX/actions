@@ -9,6 +9,11 @@ name: Logging Mutants
 # overwrite the previous commit hash with the current one for the following run
 # delete the old cache
 # save the new cache with the updated mutants
+inputs:
+  gh-token:
+    description: "The github token secret in order to delete the old cache"
+    required: true
+    default: ""
 
 runs:
   using: "composite"
@@ -105,7 +110,7 @@ runs:
         gh extension install actions/gh-actions-cache
         gh actions-cache delete "mutants-stable-develop" --confirm
       env:
-        GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        GH_TOKEN: ${{ inputs.gh-token }}
 
     # TODO: feature for retrying the save in case it fails for any reason (in order not to lose the cache)
     - name: Save Cache
