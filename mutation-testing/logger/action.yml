@@ -24,11 +24,11 @@ runs:
     #   id: runner_cleanup
     #   uses: wileyj/actions/cleanup/disk@main
 
-    # # Checkout the stacks-core code
-    # - name: Checkout the stacks core repo
-    #   uses: actions/checkout@v3
-    #   with:
-    #     fetch-depth: 0
+    # Checkout the stacks-core code
+    - name: Checkout the stacks core repo
+      uses: actions/checkout@v3
+      with:
+        fetch-depth: 0
 
     # - name: Restore mutants-output cached folder
     #   id: cache-restore
