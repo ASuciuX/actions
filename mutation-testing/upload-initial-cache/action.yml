@@ -10,21 +10,30 @@ runs:
       with:
         fetch-depth: 0
 
+    # Checkout the actions code
+    - name: Get the action repo code
+      id: git_checkout_actions
+      uses: actions/checkout@v3
+      with:
+        repository: ASuciuX/actions
+        ref: feat/mutation-testing
+        path: ./actions-repo
+
     - name: Create file with current commit hash if it doesn't exist
       shell: bash
       run: |
         if [ ! -f last_commit_hash.txt ]; then
           echo "${{ github.sha }}" > last_commit_hash.txt
         fi
-      working-directory: ./mutation-testing/packages-output
+      working-directory: ./actions-repo/mutation-testing/initial-output/${{ github.ref_name }}
 
     - name: Print old commit hash
       shell: bash
-      run: cat ./mutation-testing/packages-output/last_commit_hash.txt
+      run: cat ./actions-repo/mutation-testing/initial-output/${{ github.ref_name }}/last_commit_hash.txt
 
     # TODO: feature for retrying the save in case it fails for any reason (in order not to lose the cache)
     - name: Save Cache
       uses: actions/cache/save@v3
       with:
-        path: ./mutation-testing/packages-output
+        path: ./actions-repo/mutation-testing/initial-output/${{ github.ref_name }}
         key: mutants-stable-${{ github.ref_name }}
