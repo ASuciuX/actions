@@ -24,6 +24,7 @@ runs:
       id: check_cache
       with:
         lookup-only: true
+        path: ./
         key: mutants-stable-${{ github.ref_name }}
 
     - name: Upload initial outputs if there is no cache
