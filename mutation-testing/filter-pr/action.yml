@@ -10,7 +10,7 @@ runs:
       uses: wileyj/actions/cleanup/disk@main
 
     # Checkout the stacks-core code
-    - name: Checkout the latest code action repo
+    - name: Checkout the stacks core repo
       id: git_checkout_stacks_core
       uses: actions/checkout@v3
       with:
