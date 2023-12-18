@@ -25,15 +25,15 @@ runs:
         if [ ! -f last_commit_hash.txt ]; then
           echo "${{ github.sha }}" > last_commit_hash.txt
         fi
-      working-directory: ./actions-repo/mutation-testing/initial-output/${{ github.ref_name }}
+      working-directory: ./actions-repo/mutation-testing/initial-output/simulate-mutants-on-pr-and-merge
 
     - name: Print old commit hash
       shell: bash
-      run: cat ./actions-repo/mutation-testing/initial-output/${{ github.ref_name }}/last_commit_hash.txt
+      run: cat ./actions-repo/mutation-testing/initial-output/simulate-mutants-on-pr-and-merge/last_commit_hash.txt
 
     # TODO: feature for retrying the save in case it fails for any reason (in order not to lose the cache)
     - name: Save Cache
       uses: actions/cache/save@v3
       with:
-        path: ./actions-repo/mutation-testing/initial-output/${{ github.ref_name }}
+        path: ./actions-repo/mutation-testing/initial-output/simulate-mutants-on-pr-and-merge
         key: mutants-output-${{ github.ref_name }}
