@@ -101,22 +101,14 @@ runs:
 
     # TODO: feature for retrying the save in case it fails for any reason (in order not to lose the cache)
     - name: Save Cache
-      uses: Wandalen/wretry.action@a163f62ae554a8f3cbe27b23db15b60c0ae2e93c # v1.3.0
+      uses: actions/cache/save@704facf57e6136b1bc63b828d79edcd491f0ee84 # v3.3.2
       with:
-        uses: actions/cache/save@704facf57e6136b1bc63b828d79edcd491f0ee84 # v3.3.2
-        with:
-          path: ./mutation-testing/packages-output
-          key: mutants-output-${{ github.ref_name }}
-        attempt_limit: ${{ inputs.retries }}
-        attempt_delay: ${{ inputs.retry-delay }}
+        path: ./mutation-testing/packages-output
+        key: mutants-output-${{ github.ref_name }}
 
     - name: Upload to artifact to easily check the ouput
-      uses: Wandalen/wretry.action@a163f62ae554a8f3cbe27b23db15b60c0ae2e93c # v1.3.0
+      uses: actions/upload-artifact@v3
+      if: always()
       with:
-        uses: actions/upload-artifact@v3
-        if: always()
-        with:
-          name: mutants-output-${{ github.sha }}
-          path: ./mutation-testing/packages-output
-        attempt_limit: ${{ inputs.retries }}
-        attempt_delay: ${{ inputs.retry-delay }}
+        name: mutants-output-${{ github.sha }}
+        path: ./mutation-testing/packages-output
