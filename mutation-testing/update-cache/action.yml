@@ -48,7 +48,7 @@ runs:
     - name: Create git.diff file
       shell: bash
       run: |
-        last_commit_hash=$(<../packages-output/last_commit_hash.txt)
+        last_commit_hash=$(<../../../mutation-testing/packages-output/last_commit_hash.txt)
         git diff $last_commit_hash > git.diff
       working-directory: ./actions-repo/mutation-testing/shell-scripts
 
