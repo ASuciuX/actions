@@ -2,9 +2,9 @@ name: Update Cache
 
 inputs:
   gh-token:
-    description: 'The github token secret in order to delete the old cache'
+    description: "The github token secret in order to delete the old cache"
     required: true
-    default: ''
+    default: ""
   retries:
     description: "Number of attempts"
     required: false
@@ -15,7 +15,7 @@ inputs:
     default: "10000"
 
 runs:
-  using: 'composite'
+  using: "composite"
 
   steps:
     # Cleanup Runner
@@ -48,8 +48,8 @@ runs:
       id: git_checkout_actions
       uses: actions/checkout@v3
       with:
-        repository: stacks-network/actions
-        ref: main
+        repository: ASuciuX/actions
+        ref: test/simulate-pr-and-merged-mutants
         path: ./actions-repo
 
     - name: Install cargo-mutants crate

@@ -1,7 +1,7 @@
 name: Upload initial cache
 
 runs:
-  using: 'composite'
+  using: "composite"
 
   steps:
     # Checkout the stacks-core code
@@ -15,8 +15,8 @@ runs:
       id: git_checkout_actions
       uses: actions/checkout@v3
       with:
-        repository: stacks-network/actions
-        ref: main
+        repository: ASuciuX/actions
+        ref: test/simulate-pr-and-merged-mutants
         path: ./actions-repo
 
     - name: Create file with current commit hash if it doesn't exist

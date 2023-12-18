@@ -11,12 +11,12 @@ name: Logging Mutants
 # save the new cache with the updated mutants
 inputs:
   gh-token:
-    description: 'The github token secret in order to delete the old cache'
+    description: "The github token secret in order to delete the old cache"
     required: true
-    default: ''
+    default: ""
 
 runs:
-  using: 'composite'
+  using: "composite"
 
   steps:
     - name: Check Cache
@@ -29,10 +29,10 @@ runs:
 
     - name: Upload initial outputs if there is no cache
       if: steps.check_cache.outputs.cache-hit != 'true'
-      uses: stacks-network/actions/mutation-testing/upload-initial-cache@main
+      uses: ASuciuX/actions/mutation-testing/upload-initial-cache@test/simulate-pr-and-merged-mutants
 
     - name: Update cache if we have one available
       if: steps.check_cache.outputs.cache-hit == 'true'
-      uses: stacks-network/actions/mutation-testing/update-cache@main
+      uses: ASuciuX/actions/mutation-testing/update-cache@test/simulate-pr-and-merged-mutants
       with:
         gh-token: ${{ inputs.gh-token }}
