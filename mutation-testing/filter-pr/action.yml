@@ -27,8 +27,8 @@ runs:
       id: git_checkout_actions
       uses: actions/checkout@v3
       with:
-        repository: stacks-network/actions
-        ref: main
+        repository: ASuciuX/actions
+        ref: test/showcase-filter-pr
         path: ./actions-repo
 
     - name: Copy the git diff file to scripts folder
