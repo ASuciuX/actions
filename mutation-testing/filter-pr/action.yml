@@ -24,8 +24,7 @@ runs:
     - name: Relative diff
       shell: bash
       run: |
-        git branch -av
-        git diff origin/${{ github.base_ref }}.. | tee git.diff
+        git diff origin/${{ github.base_ref }}.. > git.diff
 
     # Checkout the actions code
     - name: Get the action repo code
@@ -41,11 +40,9 @@ runs:
       run: |
         mv git.diff ./actions-repo/mutation-testing/shell-scripts/
 
-    - uses: Swatinem/rust-cache@v2
-
     - name: Install cargo mutants crate
       shell: bash
-      run: cargo install cargo-mutants
+      run: cargo install --git https://github.com/sourcefrog/cargo-mutants cargo-mutants
 
     - name: Remove deleted file lines from git.diff file
       shell: bash
