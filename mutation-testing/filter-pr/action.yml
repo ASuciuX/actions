@@ -53,7 +53,7 @@ runs:
       shell: bash
       run: |
         set +e  # Disable immediate exit on error
-        cargo mutants --no-shuffle -j 2 -vV --in-diff git.diff --shard ${{ inputs.shard }}/8 --output ./
+        cargo mutants --no-shuffle -j 2 -vV --in-diff git.diff --shard ${{ inputs.shard }}/8 --output ./ -- -- --test-threads 1
         exit_code=$?
         mkdir mutants-shard-${{ inputs.shard }}
         echo "$exit_code" > ./mutants-shard-${{ inputs.shard }}/exit_code.txt
