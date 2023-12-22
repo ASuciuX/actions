@@ -1,12 +1,12 @@
 name: Filter PR Mutants
 
+inputs:
+  shard:
+    description: "The number of the shard to run"
+    required: true
+
 runs:
   using: "composite"
-
-  strategy:
-    fail-fast: false
-    matrix:
-      shard: [0, 1, 2, 3, 4, 5, 6, 7]
 
   steps:
     # Cleanup Runner
@@ -56,16 +56,56 @@ runs:
       shell: bash
       run: |
         set +e  # Disable immediate exit on error
-        cargo mutants --no-shuffle -j 2 -vV --in-diff git.diff --shard ${{ matrix.shard }}/8 --output ./
-        mkdir shard-${{ matrix.shard }}
-        mv mutants.out/*.txt shard-${{ matrix.shard }}/
+        cargo mutants --no-shuffle -j 2 -vV --in-diff git.diff --shard ${{ input.shard }}/8 --output ./
         exit_code=$?
-        echo "$exit_code" > shard-${{ matrix.shard }}/exit_code.txt
         set -e  # Enable immediate exit on error again
-      working-directory: actions-repo/mutation-testing/shell-scripts
 
-    - name: Save Cache
-      uses: actions/cache/save@v3
-      with:
-        path: actions-repo/mutation-testing/shell-scripts/shard-${{ matrix.shard }}
-        key: shard-${{ matrix.shard }}/
+        case $exit_code in
+        0)
+            if [ -s ./mutants.out/unviable.txt ]; then
+                echo "-------------"
+                echo "Found unviable mutants:"
+                cat ./mutants.out/unviable.txt
+                echo "-------------"
+                echo "To resolve this issue, consider one of the following options:"
+                echo "1. Create 'Default::default()' implementation for the specific structure."
+                echo "2. Add '#[mutants::skip]' or '#[cfg_attr(test, mutants::skip)]' function headers."
+                exit 1
+            fi
+            echo "All new and updated functions are caught!"
+            ;;
+        1)
+            echo "Invalid command line arguments!"
+            exit 1
+            ;;
+        2 | 3)
+            if [ -s ./mutants.out/missed.txt ]; then
+                echo "Found missed mutants:"
+                cat ./mutants.out/missed.txt
+            fi
+            if [ -s ./mutants.out/timeout.txt ]; then
+                echo "-------------"
+                echo "Found timeout mutants:"
+                cat ./mutants.out/timeout.txt
+            fi
+            if [ -s ./mutants.out/unviable.txt ]; then
+                echo "-------------"
+                echo "Found unviable mutants:"
+                cat ./mutants.out/unviable.txt
+                echo "-------------"
+                echo "To resolve this issue, consider one of the following options:"
+                echo "1. Create 'Default::default()' implementation for the specific structure."
+                echo "2. Add '#[mutants::skip]' or '#[cfg_attr(test, mutants::skip)]' function headers."
+            fi
+            exit 1
+            ;;
+        4)
+            echo "Building the packages failed without any mutations!"
+            exit 1
+            ;;
+        *)
+            echo "Unknown exit code: $exit_code"
+            exit 1
+            ;;
+        esac
+      working-directory: actions-repo/mutation-testing/shell-scripts
