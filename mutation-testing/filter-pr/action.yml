@@ -55,6 +55,9 @@ runs:
         set +e  # Disable immediate exit on error
         cargo mutants --no-shuffle -j 2 -vV --in-diff git.diff --shard ${{ inputs.shard }}/8 --output ./
         exit_code=$?
+        mkdir mutants-shard-${{ inputs.shard }}
+        echo "$exit_code" > ./mutants-shard-${{ inputs.shard }}/exit_code.txt
+        mv ./mutants.out/*.txt mutants-shard-${{ inputs.shard }}/
         set -e  # Enable immediate exit on error again
 
         case $exit_code in
@@ -106,3 +109,10 @@ runs:
             ;;
         esac
       working-directory: actions-repo/mutation-testing/shell-scripts
+
+    - name: Upload artifact
+      uses: actions/upload-artifact@v3
+      if: always()
+      with:
+        name: mutants-shard-${{ inputs.shard }}
+        path: actions-repo/mutation-testing/shell-scripts/mutants-shard-${{ inputs.shard }}
