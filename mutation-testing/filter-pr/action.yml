@@ -59,55 +59,6 @@ runs:
         echo "$exit_code" > ./mutants-shard-${{ inputs.shard }}/exit_code.txt
         mv ./mutants.out/*.txt mutants-shard-${{ inputs.shard }}/
         set -e  # Enable immediate exit on error again
-
-        case $exit_code in
-        0)
-            if [ -s ./mutants.out/unviable.txt ]; then
-                echo "-------------"
-                echo "Found unviable mutants:"
-                cat ./mutants.out/unviable.txt
-                echo "-------------"
-                echo "To resolve this issue, consider one of the following options:"
-                echo "1. Create 'Default::default()' implementation for the specific structure."
-                echo "2. Add '#[mutants::skip]' or '#[cfg_attr(test, mutants::skip)]' function headers."
-                exit 1
-            fi
-            echo "All new and updated functions are caught!"
-            ;;
-        1)
-            echo "Invalid command line arguments!"
-            exit 1
-            ;;
-        2 | 3)
-            if [ -s ./mutants.out/missed.txt ]; then
-                echo "Found missed mutants:"
-                cat ./mutants.out/missed.txt
-            fi
-            if [ -s ./mutants.out/timeout.txt ]; then
-                echo "-------------"
-                echo "Found timeout mutants:"
-                cat ./mutants.out/timeout.txt
-            fi
-            if [ -s ./mutants.out/unviable.txt ]; then
-                echo "-------------"
-                echo "Found unviable mutants:"
-                cat ./mutants.out/unviable.txt
-                echo "-------------"
-                echo "To resolve this issue, consider one of the following options:"
-                echo "1. Create 'Default::default()' implementation for the specific structure."
-                echo "2. Add '#[mutants::skip]' or '#[cfg_attr(test, mutants::skip)]' function headers."
-            fi
-            exit 1
-            ;;
-        4)
-            echo "Building the packages failed without any mutations!"
-            exit 1
-            ;;
-        *)
-            echo "Unknown exit code: $exit_code"
-            exit 1
-            ;;
-        esac
       working-directory: actions-repo/mutation-testing/shell-scripts
 
     - name: Upload artifact
