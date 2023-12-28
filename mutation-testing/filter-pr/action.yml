@@ -51,9 +51,6 @@ runs:
 
     - name: Run mutants and check the exit code of the command, fail the workflow if mutations are not caught
       shell: bash
-      env: 
-        BITCOIND_TEST=1
-        RUST_BACKTRACE=full
       run: |
         set +e  # Disable immediate exit on error
         cargo mutants --no-shuffle -j 2 -vV --in-diff git.diff --shard ${{ inputs.shard }}/8 --output ./ -- -- --test-threads 1
@@ -63,6 +60,9 @@ runs:
         mv ./mutants.out/*.txt mutants-shard-${{ inputs.shard }}/
         set -e  # Enable immediate exit on error again
       working-directory: actions-repo/mutation-testing/shell-scripts
+      env:
+        BITCOIND_TEST=1
+        RUST_BACKTRACE=full
 
     - name: Upload artifact
       uses: actions/upload-artifact@v3
