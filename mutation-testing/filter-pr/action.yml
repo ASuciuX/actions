@@ -52,7 +52,7 @@ runs:
     - name: Run mutants and check the exit code of the command, fail the workflow if mutations are not caught
       shell: bash
       env: 
-	BITCOIND_TEST=1
+        BITCOIND_TEST=1
         RUST_BACKTRACE=full
       run: |
         set +e  # Disable immediate exit on error
