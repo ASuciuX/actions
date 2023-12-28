@@ -51,9 +51,12 @@ runs:
 
     - name: Run mutants and check the exit code of the command, fail the workflow if mutations are not caught
       shell: bash
+      env: 
+	BITCOIND_TEST=1
+        RUST_BACKTRACE=full
       run: |
         set +e  # Disable immediate exit on error
-        BITCOIND_TEST=1 RUST_BACKTRACE=full cargo mutants --no-shuffle -j 2 -vV --in-diff git.diff --shard ${{ inputs.shard }}/8 --output ./ -- -- --test-threads 1
+        cargo mutants --no-shuffle -j 2 -vV --in-diff git.diff --shard ${{ inputs.shard }}/8 --output ./ -- -- --test-threads 1
         exit_code=$?
         mkdir mutants-shard-${{ inputs.shard }}
         echo "$exit_code" > ./mutants-shard-${{ inputs.shard }}/exit_code.txt
