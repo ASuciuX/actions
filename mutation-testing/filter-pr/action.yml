@@ -53,6 +53,8 @@ runs:
       shell: bash
       run: |
         set +e  # Disable immediate exit on error
+        export BITCOIND_TEST=1
+        export RUST_BACKTRACE=full
         cargo mutants --no-shuffle -j 2 -vV --in-diff git.diff --shard ${{ inputs.shard }}/8 --output ./ -- -- --test-threads 1
         exit_code=$?
         mkdir mutants-shard-${{ inputs.shard }}
@@ -60,9 +62,6 @@ runs:
         mv ./mutants.out/*.txt mutants-shard-${{ inputs.shard }}/
         set -e  # Enable immediate exit on error again
       working-directory: actions-repo/mutation-testing/shell-scripts
-      env:
-        BITCOIND_TEST=1
-        RUST_BACKTRACE=full
 
     - name: Upload artifact
       uses: actions/upload-artifact@v3
