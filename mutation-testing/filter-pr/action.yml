@@ -2,8 +2,13 @@ name: Filter PR Mutants
 
 inputs:
   shard:
-    description: "The number of the shard to run"
-    required: true
+    description: "The number of the shard to run (`-1` if ran without shards)"
+    required: false
+    default: -1
+  contains-big-package:
+    description: "True if there are mutants on `stackslib`, `stacks-node` or `clarity` packages"
+    required: false
+    default: false
 
 runs:
   using: "composite"
@@ -53,9 +58,20 @@ runs:
       shell: bash
       run: |
         set +e  # Disable immediate exit on error
-        export BITCOIND_TEST=1
-        export RUST_BACKTRACE=full
-        cargo mutants --no-shuffle -j 2 -vV --in-diff git.diff --shard ${{ inputs.shard }}/16 --output ./ -- -- --test-threads 1
+        if [[ ${{ inputs.shard }} == -1 ]]; then
+          if [[ ${{ inputs.contains-big-package }} == true ]]; then
+            cargo mutants --no-shuffle -vV --in-diff git.diff --output ./ -- -- --test-threads 1
+          else
+            cargo mutants --no-shuffle -vV --in-diff git.diff --output ./
+          fi
+        else
+          if [[ ${{ inputs.contains-big-package }} == true ]]; then
+            cargo mutants --no-shuffle -vV --in-diff git.diff --shard ${{ inputs.shard }}/8 --output ./ -- -- --test-threads 1
+          else
+            cargo mutants --no-shuffle -vV --in-diff git.diff --shard ${{ inputs.shard }}/8 --output ./
+          fi
+        fi
+        cargo mutants --no-shuffle -j 2 -vV --in-diff git.diff --shard ${{ inputs.shard }}/16 --output ./ -- -- --test-threads ${{ inputs.threads }}
         exit_code=$?
         mkdir mutants-shard-${{ inputs.shard }}
         echo "$exit_code" > ./mutants-shard-${{ inputs.shard }}/exit_code.txt
