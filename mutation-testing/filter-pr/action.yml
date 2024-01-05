@@ -71,7 +71,6 @@ runs:
             cargo mutants --no-shuffle -vV --in-diff git.diff --shard ${{ inputs.shard }}/8 --output ./
           fi
         fi
-        cargo mutants --no-shuffle -j 2 -vV --in-diff git.diff --shard ${{ inputs.shard }}/16 --output ./ -- -- --test-threads ${{ inputs.threads }}
         exit_code=$?
         mkdir mutants-shard-${{ inputs.shard }}
         echo "$exit_code" > ./mutants-shard-${{ inputs.shard }}/exit_code.txt
