@@ -118,7 +118,7 @@ runs:
         echo "$exit_code" > ./mutants-shard-${{ inputs.package-dimension }}-${{ inputs.shard }}/exit_code.txt
         mv ./mutants.out/*.txt mutants-shard-${{ inputs.package-dimension }}-${{ inputs.shard }}/
         set -e  # Enable immediate exit on error again
-        if [[ "$exit_code" -eq 4 || "$exit_code" -eq 1 ]]; then
+        if [[ $exit_code == 4 || $exit_code == 1 ]]; then
           mv tested_mutants.txt mutants-shard-${{ inputs.package-dimension }}-${{ inputs.shard }}/
           exit 1
         fi
