@@ -96,17 +96,21 @@ runs:
           if [[ ${{ inputs.package-dimension }} == big ]]; then
             echo "Running mutants without shards on big packages"
             cargo mutants --no-shuffle -vV -F "$(<mutants_by_packages/regex_big.txt)" --output ./ -- -- --test-threads 1
+            echo "$(cargo mutants --no-shuffle -vV -F "$(<mutants_by_packages/regex_big.txt)" --output ./ -- -- --test-threads 1 --list)" > tested_mutants.txt
           else
             echo "Running mutants without shards on small packages"
             cargo mutants --no-shuffle -vV -F "$(<mutants_by_packages/regex_small.txt)" --output ./
+            echo "$(cargo mutants --no-shuffle -vV -F "$(<mutants_by_packages/regex_small.txt)" --output ./ --list)" > tested_mutants.txt
           fi
         else
           if [[ ${{ inputs.package-dimension }} == big ]]; then
             echo "Running mutants with shard ${{ inputs.shard }} on big packages"
             cargo mutants --no-shuffle -vV -F "$(<mutants_by_packages/regex_big.txt)" --shard ${{ inputs.shard }}/8 --output ./ -- -- --test-threads 1
+            echo "$(cargo mutants --no-shuffle -vV -F "$(<mutants_by_packages/regex_big.txt)" --shard ${{ inputs.shard }}/8 --output ./ -- -- --test-threads 1 --list)" > tested_mutants.txt
           else
             echo "Running mutants with shard ${{ inputs.shard }} on small packages"
             cargo mutants --no-shuffle -vV -F "$(<mutants_by_packages/regex_small.txt)" --shard ${{ inputs.shard }}/4 --output ./
+            echo "$(cargo mutants --no-shuffle -vV -F "$(<mutants_by_packages/regex_small.txt)" --shard ${{ inputs.shard }}/4 --output ./ --list)" > tested_mutants.txt
           fi
         fi
         exit_code=$?
@@ -114,6 +118,10 @@ runs:
         echo "$exit_code" > ./mutants-shard-${{ inputs.package-dimension }}-${{ inputs.shard }}/exit_code.txt
         mv ./mutants.out/*.txt mutants-shard-${{ inputs.package-dimension }}-${{ inputs.shard }}/
         set -e  # Enable immediate exit on error again
+        if [[ "$exit_code" -eq 4 || "$exit_code" -eq 1 ]]; then
+          mv tested_mutants.txt mutants-shard-${{ inputs.package-dimension }}-${{ inputs.shard }}/
+          exit 1
+        fi
       working-directory: actions-repo/mutation-testing/shell-scripts
 
     - name: Upload artifact
