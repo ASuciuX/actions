@@ -1,3 +1,6 @@
+# Deprecated Fork For Mutants Composite Action
+Moved to [feat/mutation-testing](https://github.com/stacks-network/actions/tree/feat/mutation-testing) on the source repo.
+
 # Stacks Network github actions
 
 Monorepo of [composite actions](https://docs.github.com/en/actions/creating-actions/creating-a-composite-action) used in the [stacks-network](https://github.com/stacks-network) org
